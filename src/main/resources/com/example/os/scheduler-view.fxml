@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.os.SchedulerController"
+            style="-fx-background-color: #f5f5f5;">
+    
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Label text="AI-Based Process Scheduler" 
+                   style="-fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="Algorithm:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <ComboBox fx:id="algorithmCombo" prefWidth="200">
+                </ComboBox>
+                <Label text="Time Quantum:" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+                <TextField fx:id="timeQuantumField" prefWidth="80" text="2"/>
+                <Button fx:id="startButton" text="Start Single" onAction="#handleStart" 
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 120;"/>
+                <Button fx:id="compareButton" text="Compare All" onAction="#handleCompareAll" 
+                        style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 120;"/>
+                <Button fx:id="pauseButton" text="Pause" onAction="#handlePause" 
+                        style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 100;" disable="true"/>
+                <Button fx:id="resetButton" text="Reset" onAction="#handleReset" 
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 100;"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.4" orientation="HORIZONTAL">
+            <items>
+                <VBox spacing="15" style="-fx-padding: 15;">
+                    <Label text="Process Management" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <HBox spacing="10">
+                        <Button text="Add Process" onAction="#handleAddProcess" 
+                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Random Generate" onAction="#handleRandomGenerate" 
+                                style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Remove Selected" onAction="#handleRemoveProcess" 
+                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Clear All" onAction="#handleClearAll" 
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+                    <TableView fx:id="processTable" prefHeight="400">
+                        <columns>
+                            <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+                            <TableColumn fx:id="arrivalCol" text="Arrival" prefWidth="80"/>
+                            <TableColumn fx:id="burstCol" text="Burst" prefWidth="80"/>
+                            <TableColumn fx:id="priorityCol" text="Priority" prefWidth="80"/>
+                            <TableColumn fx:id="waitingCol" text="Waiting" prefWidth="80"/>
+                            <TableColumn fx:id="turnaroundCol" text="Turnaround" prefWidth="100"/>
+                            <TableColumn fx:id="completionCol" text="Completion" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                <TabPane>
+                    <tabs>
+                        <Tab text="Single Algorithm">
+                            <VBox spacing="15" style="-fx-padding: 15;">
+                                <Label text="Performance Metrics" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                <GridPane hgap="15" vgap="10">
+                                    <Label text="Average Waiting Time:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                    <Label fx:id="avgWaitingLabel" text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="0" 
+                                           style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                                    <Label text="Average Turnaround Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <Label fx:id="avgTurnaroundLabel" text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" 
+                                           style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                                </GridPane>
+                                <Separator/>
+                                <Label text="Gantt Chart" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                <ScrollPane fx:id="ganttScrollPane" fitToWidth="true" prefHeight="300">
+                                    <VBox fx:id="ganttContainer" spacing="5" style="-fx-padding: 10;"/>
+                                </ScrollPane>
+                            </VBox>
+                        </Tab>
+                        <Tab text="Comparison">
+                            <VBox spacing="15" style="-fx-padding: 15;">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="ML Recommendation:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="bestSchedulerLabel" text="Run comparison first" 
+                                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                                </HBox>
+                                <Separator/>
+                                <Label text="Algorithm Comparison Table" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                                <TableView fx:id="comparisonTable" prefHeight="400">
+                                    <columns>
+                                        <TableColumn fx:id="algoCol" text="Algorithm" prefWidth="200"/>
+                                        <TableColumn fx:id="waitCol" text="Avg Waiting" prefWidth="150"/>
+                                        <TableColumn fx:id="turnCol" text="Avg Turnaround" prefWidth="150"/>
+                                        <TableColumn fx:id="scoreCol" text="ML Score" prefWidth="150"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </items>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10; -fx-background-color: #ecf0f1;">
+            <Label text="Status:" style="-fx-font-weight: bold;"/>
+            <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+</BorderPane>
+
